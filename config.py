@@ -30,7 +30,7 @@ DB_TABLES = {
     'tb_dress': {
         'table_name': 'tb_dress',
         'prompt_fields': ['shop_name', 'description', 'features', 'specialty'],
-        'prompt_template': 'wedding_dress_shop'
+        'prompt_template': 'wedding_dress'
     },
     'tb_dress_shop': {
         'table_name': 'tb_dress_shop',
@@ -41,6 +41,11 @@ DB_TABLES = {
         'table_name': 'tb_wedding_hall',
         'prompt_fields': ['name', 'venue_type', 'parking'],
         'prompt_template': 'wedding_hall'
+    },
+    'tb_makeup_shop': {
+        'table_name': 'tb_makeup_shop',
+        'prompt_fields': ['shop_name', 'description', 'features', 'specialty'],
+        'prompt_template': 'makeup_shop'
     }
 }
 
@@ -55,6 +60,8 @@ IMAGE_URL_BASE = os.getenv('IMAGE_URL_BASE', '/images')
 IMAGE_SIZE = os.getenv('IMAGE_SIZE', '512x512')
 IMAGE_QUALITY = os.getenv('IMAGE_QUALITY', 'standard')
 MAX_RETRIES = int(os.getenv('MAX_RETRIES', 3))
+DEFAULT_GENERATION_LIMIT = os.getenv('DEFAULT_GENERATION_LIMIT')
+DEFAULT_GENERATION_LIMIT = int(DEFAULT_GENERATION_LIMIT) if DEFAULT_GENERATION_LIMIT else None
 
 OUTPUT_DIR = ROOT_DIR / 'generated_images'
 OUTPUT_DIR.mkdir(exist_ok=True)

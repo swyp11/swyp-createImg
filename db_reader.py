@@ -35,10 +35,14 @@ class DatabaseReader:
         """Generate DALL-E prompt from row data"""
         prompt_parts = []
 
-        if self.prompt_template == 'wedding_dress_shop':
+        if self.prompt_template == 'wedding_dress':
+            prompt_parts.append("A professional product photograph of a beautiful wedding dress on a mannequin.")
+        elif self.prompt_template == 'wedding_dress_shop':
             prompt_parts.append("A professional photograph of a wedding dress shop interior.")
         elif self.prompt_template == 'wedding_hall':
             prompt_parts.append("A professional photograph of a wedding venue.")
+        elif self.prompt_template == 'makeup_shop':
+            prompt_parts.append("A professional photograph of a wedding makeup salon interior.")
 
         for field in self.prompt_fields:
             value = row.get(field)

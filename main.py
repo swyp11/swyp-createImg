@@ -212,8 +212,8 @@ def main():
     parser.add_argument(
         '--limit',
         type=int,
-        default=None,
-        help='Maximum number of rows to process per table'
+        default=config.DEFAULT_GENERATION_LIMIT,
+        help=f'Maximum number of rows to process per table (default: {config.DEFAULT_GENERATION_LIMIT or "unlimited"})'
     )
     parser.add_argument(
         '--dry-run',
