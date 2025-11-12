@@ -56,9 +56,25 @@ class DatabaseReader:
                 elif field == 'specialty':
                     prompt_parts.append(f"Specializing in {value}.")
                 elif field == 'venue_type':
-                    prompt_parts.append(f"Type: {value}.")
+                    venue_desc = value.replace('_', ' ').title()
+                    prompt_parts.append(f"Venue type: {venue_desc}.")
+                elif field == 'type':
+                    prompt_parts.append(f"Style: {value.replace('_', ' ').title()}.")
+                elif field == 'color':
+                    prompt_parts.append(f"Color: {value}.")
+                elif field == 'shape':
+                    prompt_parts.append(f"Silhouette: {value}.")
+                elif field == 'mood':
+                    prompt_parts.append(f"Mood: {value.replace('_', ' ').title()}.")
+                elif field == 'neck_line':
+                    prompt_parts.append(f"Neckline: {value.replace('_', ' ').title()}.")
+                elif field == 'fabric':
+                    prompt_parts.append(f"Fabric: {value}.")
                 elif field == 'parking':
-                    if str(value).lower() in ['true', 'yes', '1']:
+                    # Handle both boolean and numeric parking values
+                    if isinstance(value, (int, float)) and value > 0:
+                        prompt_parts.append(f"Parking available for {int(value)} cars.")
+                    elif str(value).lower() in ['true', 'yes', '1']:
                         prompt_parts.append("With parking available.")
 
         prompt_parts.append("High quality, professional, bright lighting, elegant atmosphere.")

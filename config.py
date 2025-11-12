@@ -29,7 +29,7 @@ def get_db_engine():
 DB_TABLES = {
     'tb_dress': {
         'table_name': 'tb_dress',
-        'prompt_fields': ['shop_name', 'description', 'features', 'specialty'],
+        'prompt_fields': ['name', 'type', 'color', 'shape', 'mood', 'neck_line', 'fabric', 'features'],
         'prompt_template': 'wedding_dress'
     },
     'tb_dress_shop': {
