@@ -31,12 +31,30 @@ class DatabaseReader:
 
         return rows
 
+    def _sanitize_value(self, value: str) -> str:
+        """Sanitize value to avoid DALL-E content policy violations"""
+        if not value:
+            return value
+
+        # Replace problematic keywords
+        replacements = {
+            'SEXY': 'Sophisticated',
+            'sexy': 'sophisticated',
+            'SEXY_ELEGANT': 'Elegant and Sophisticated',
+            'Sexy Elegant': 'Elegant and Sophisticated',
+        }
+
+        for old, new in replacements.items():
+            value = value.replace(old, new)
+
+        return value
+
     def generate_prompt_from_row(self, row: Dict[str, Any]) -> str:
         """Generate DALL-E prompt from row data"""
         prompt_parts = []
 
         if self.prompt_template == 'wedding_dress':
-            prompt_parts.append("A professional product photograph of a beautiful wedding dress on a mannequin.")
+            prompt_parts.append("A professional product photograph of a beautiful wedding dress on a display.")
         elif self.prompt_template == 'wedding_dress_shop':
             prompt_parts.append("A professional photograph of a wedding dress shop interior.")
         elif self.prompt_template == 'wedding_hall':
@@ -47,25 +65,38 @@ class DatabaseReader:
         for field in self.prompt_fields:
             value = row.get(field)
             if value:
+                # Sanitize text values
+                if isinstance(value, str):
+                    value = self._sanitize_value(value)
+
                 if field in ['shop_name', 'name']:
-                    prompt_parts.append(f"Named '{value}'.")
+                    # Skip name to avoid Korean text in prompt
+                    pass
                 elif field == 'description':
-                    prompt_parts.append(value)
+                    # Skip Korean description
+                    pass
                 elif field == 'features':
-                    prompt_parts.append(f"Features: {value}.")
+                    # Skip Korean features
+                    pass
                 elif field == 'specialty':
-                    prompt_parts.append(f"Specializing in {value}.")
+                    # Skip Korean specialty
+                    pass
                 elif field == 'venue_type':
                     venue_desc = value.replace('_', ' ').title()
                     prompt_parts.append(f"Venue type: {venue_desc}.")
                 elif field == 'type':
                     prompt_parts.append(f"Style: {value.replace('_', ' ').title()}.")
                 elif field == 'color':
-                    prompt_parts.append(f"Color: {value}.")
+                    # Skip color if Korean, only use if English
+                    if value and all(ord(char) < 128 for char in value):
+                        prompt_parts.append(f"Color: {value}.")
                 elif field == 'shape':
-                    prompt_parts.append(f"Silhouette: {value}.")
+                    # Skip shape if Korean
+                    if value and all(ord(char) < 128 for char in value):
+                        prompt_parts.append(f"Silhouette: {value}.")
                 elif field == 'mood':
-                    prompt_parts.append(f"Mood: {value.replace('_', ' ').title()}.")
+                    mood_text = value.replace('_', ' ').title()
+                    prompt_parts.append(f"Mood: {mood_text}.")
                 elif field == 'neck_line':
                     prompt_parts.append(f"Neckline: {value.replace('_', ' ').title()}.")
                 elif field == 'fabric':
